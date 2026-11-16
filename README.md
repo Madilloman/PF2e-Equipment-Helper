@@ -14,6 +14,29 @@ Search and rank Pathfinder Second Edition equipment by class, level, budget, act
 
 A free GitHub account is needed to open an issue.
 
+## Key features
+
+### Browse
+Pick a **class**, **character level** and **budget (gp)**, and the app lists items you can afford at your level. You can also set an item level range, search item names and descriptions, and sort results by item score, level or price (ascending or descending).
+
+- **Popular for this class:** Each class has a curated list of well-regarded gear, based on a class gear guide with star ratings. Choosing "Popular for this class" shows those items, and ranks them higher when you sort by item score.
+- **What to look for:** A short guide box for the selected class that explains which kinds of gear matter most, and lists the items the guide recommends.
+- **Filters:** Narrow results by item type, rarity, trait, worn slot, bulk, usage, hands, range, reload, content (Legacy or Remaster), weapon and armor details, activated abilities (action type, frequency, duration), and passive effects (bonus type, skill bonus, saving throw bonus, invested). A **Resistances and Immunities** section filters by resistance type, resistance value and immunity type. Each filter can include or exclude values.
+- **Item score:** A button shows or hides a score on each result card. Hover over the score to see which tags added to or subtracted from it.
+- **Hide items:** Hide any item you don't want to see again. Hidden items have their own tab, where you can restore them.
+
+### Class Preferences
+Every class has default preferences that decide how items are scored. You can change them: add a preference (such as a bonus type, skill, trait or "Popular for this class"), give it a weight, and set the highest weapon category your class is proficient with so higher-category weapons are scored down. Preferences can be reset to the defaults, and exported, shared or imported with a preferences code.
+
+### Saved Item Lists
+Save items to named lists, such as a shopping list for the next level or a party loot wish list. Add an item to a list from its result card, create as many lists as you like, and see the total gold value at the top of each list. Lists can be exported to and imported from a file. They are stored in your browser, and sync across devices when the app is opened in Claude.
+
+### Presets and sharing
+Save your current filters as a named preset, or copy a share code that someone else can paste in to load the same filters.
+
+### Item details
+Result cards show level, price, bulk, traits, usage, hands, range, reload and activation details, plus a link to the item's entry on Archives of Nethys.
+
 ## How it works
 
 The whole app is a single self-contained page (`index.html`) that runs in the browser. It has no server, account or tracking. Saved presets stay in your own browser.
