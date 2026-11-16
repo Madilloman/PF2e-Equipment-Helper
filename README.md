@@ -29,7 +29,7 @@ Pick a **class**, **character level** and **budget (gp)**, and the app lists ite
 Every class has default preferences that decide how items are scored. You can change them: add a preference (such as a bonus type, skill, trait or "Popular for this class"), give it a weight, and set the highest weapon category your class is proficient with so higher-category weapons are scored down. Preferences can be reset to the defaults, and exported, shared or imported with a preferences code.
 
 ### Saved Item Lists
-Save items to named lists, such as a shopping list for the next level or a party loot wish list. Add an item to a list from its result card, create as many lists as you like, and see the total gold value at the top of each list. Lists can be exported to and imported from a file. They are stored in your browser, and sync across devices when the app is opened in Claude.
+Save items to named lists, such as a shopping list for the next level or a party loot wish list. Add an item to a list from its result card, create as many lists as you like, and see the total gold value at the top of each list. Lists can be exported to and imported from a file. They are stored in your browser.
 
 ### Presets and sharing
 Save your current filters as a named preset, or copy a share code that someone else can paste in to load the same filters.
