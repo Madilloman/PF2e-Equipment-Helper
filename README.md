@@ -18,7 +18,7 @@ A free GitHub account is needed to open an issue.
 
 The whole app is a single self-contained page (`index.html`) that runs in the browser. It has no server, account or tracking. Saved presets stay in your own browser.
 
-Item data is a snapshot of about 5,600 items from the open-source [Foundry VTT PF2e system](https://github.com/foundryvtt/pf2e). Effects are detected by text matching, so always check an item's [Archives of Nethys](https://2e.aonprd.com/) entry before buying it.
+Item data is a snapshot as of 11/16/2026 from the open-source [Foundry VTT PF2e System](https://github.com/foundryvtt/pf2e). Tags are assigned by text matching, so there may be edge cases where they do not align with the item; check the [Archives of Nethys](https://2e.aonprd.com/) link to confirm item details.
 
 ## Legal
 
