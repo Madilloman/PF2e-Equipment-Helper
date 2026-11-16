@@ -1,5 +1,5 @@
 name: Item data problem
-description: An item has the wrong price, level, traits or effects, is missing, or is ranked oddly
+description: An item has an incorrect description, traits or filter tags, or is missing
 title: "[Data] "
 labels: ["data"]
 body:
@@ -15,11 +15,9 @@ body:
       label: What's wrong?
       multiple: true
       options:
-        - Wrong price or level
-        - Wrong traits or usage
-        - Effect not detected or wrongly detected
-        - Item missing
-        - Ranked too high or too low
+        - Incorrect item description/traits
+        - Incorrect filter tags
+        - Item Missing
         - Other
     validations:
       required: true
