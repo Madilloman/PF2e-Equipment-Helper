@@ -38,7 +38,13 @@ table{width:100%;border-collapse:collapse;background:var(--panel);border:1px sol
 th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}
 .sc{overflow-x:auto}
 .ex{border:0;background:none;color:var(--acc);font-size:1.1rem;cursor:pointer;padding:0 6px 0 0;min-width:24px}
-.full{white-space:pre-wrap;margin:6px 0 4px;padding-top:6px;border-top:1px solid var(--line)}
+.full{white-space:normal;margin:6px 0 4px;padding-top:6px;border-top:1px solid var(--line);overflow-wrap:anywhere}
+.full p{margin:0 0 8px}.full .mu{color:var(--mute)}.full ul.bul{margin:0 0 8px;padding-left:22px}.full ul.bul ul{margin:2px 0;padding-left:20px}
+.irows{margin:0 0 8px}.ih{padding:6px 0 4px}.itg{margin-left:4px}.itg .tg{display:inline-block;font-size:.78rem;border:1px solid var(--line);border-radius:4px;padding:0 6px;margin:0 3px 0 0;color:var(--mute);white-space:nowrap}
+.ir{display:grid;grid-template-columns:minmax(88px,max-content) minmax(0,1fr);gap:2px 14px;padding:5px 0;border-top:1px solid var(--line)}.ir b{font-weight:600;color:var(--mute)}.ir.cr{margin:0 0 8px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:1px}.dcs{background:#1D9E75}.ds{background:#97C459}.df{background:#EF9F27}.dcf{background:#E24B4A}
+.full .sbx{border:1px solid var(--line);border-radius:6px;padding:2px 12px;margin:0 0 10px}.full .sbx .r{display:grid;grid-template-columns:minmax(120px,max-content) minmax(0,1fr);gap:2px 14px;padding:5px 0;border-top:1px solid var(--line)}.full .sbx .r:first-child{border-top:0}
+.pv .gla{display:inline-block;margin-left:6px;border:1px solid var(--line);border-radius:4px;padding:0 6px;font-size:.85rem;white-space:nowrap;color:var(--ink)}
 .act{color:var(--brass);font-weight:700;white-space:nowrap}
 .tag.act{font-size:1rem;line-height:1.3}
 .tag.act.actc{font-size:.88rem}
@@ -261,9 +267,43 @@ function addSc(d,x){var c=cfg();if(c.any)return;var a=scoreParts(x,c,st.roles.in
 var b=document.createElement('span');b.className='scb';b.tabIndex=0;b.textContent=' \u00b7 Score '+(Math.round(tot*100)/100);b.setAttribute('aria-label','Item score '+(Math.round(tot*100)/100)+'. Hover or focus for the breakdown.');
 b._bd='<strong>Item score '+(Math.round(tot*100)/100)+'</strong><div class="meta">Total of the tags below for '+esc(c.cn)+'</div>'+a.map(function(z){return '<div class="bdr"><span>'+esc(z[0])+'</span><b>'+fmn(z[1])+'</b></div>'}).join('');s.appendChild(b)}
 function card(x){var d=document.createElement('div');d.className='item';
-d.innerHTML='<h3><span><button class="ex" aria-expanded="false" aria-label="Show full description of '+esc(x.n)+'">\u25b8</button>'+ricon(x.ry)+link(x)+lgb(x)+'</span><span class="meta">Level '+x.l+' \u00b7 '+fm(x.p)+'<span class="scs"></span></span></h3>'+trs(x)+'<div class="meta">'+metaLine(x)+'</div>'+usl(x)+wl(x)+'<p class="pv">'+esc(x.d)+(x.d.length>=170?'\u2026':'')+'</p><div class="full" hidden></div>'+(x.sb!=null?'<div class="meta"><em>'+esc(SBL[x.sb])+'</em></div>':'')+tags(x.sk,'','Skill bonus')+tags((x.b||[]).map(function(b){return BUF[b]}),'','Passive effects')+tags((x.bn||[]).map(function(b){return BON[b]+' bonus'}),'','Bonus type')+(x.a||[]).map(function(a){return '<span class="tag a act'+(a=='C'?' actc':'')+'" title="Action type: '+ACTN[a]+'" aria-label="Action type: '+ACTN[a]+'">'+ACT[a]+'</span>'}).join('')+tags((x.f||[]).filter(function(f){return f!='none'}).map(function(f){return FQ[f]}),'a','Frequency')+tags((x.ab||[]).map(function(a){return ABL[a]}),'a','Activated abilities')+tags((x.du||[]).map(function(a){return DUR[a]}),'a','Duration')+tags(x.t.slice(0,4),'','Trait');if(showSc)addSc(d,x);var b=d.querySelector('.ex'),f=d.querySelector('.full'),pv=d.querySelector('.pv');function so(o){f.hidden=!o;pv.hidden=o;b.setAttribute('aria-expanded',o);b.textContent=o?'\u25be':'\u25b8';if(o&&!f.innerHTML)f.innerHTML=fx(x.x||x.d)}b.onclick=function(){so(f.hidden)};d.so=so;FB(d,x);HB(d,x);return d}
+d.innerHTML='<h3><span><button class="ex" aria-expanded="false" aria-label="Show full description of '+esc(x.n)+'">\u25b8</button>'+ricon(x.ry)+link(x)+lgb(x)+'</span><span class="meta">Level '+x.l+' \u00b7 '+fm(x.p)+'<span class="scs"></span></span></h3>'+trs(x)+'<div class="meta">'+metaLine(x)+'</div>'+usl(x)+wl(x)+glance(x)+'<div class="full" hidden></div>'+(x.sb!=null?'<div class="meta"><em>'+esc(SBL[x.sb])+'</em></div>':'')+tags(x.sk,'','Skill bonus')+tags((x.b||[]).map(function(b){return BUF[b]}),'','Passive effects')+tags((x.bn||[]).map(function(b){return BON[b]+' bonus'}),'','Bonus type')+(x.a||[]).map(function(a){return '<span class="tag a act'+(a=='C'?' actc':'')+'" title="Action type: '+ACTN[a]+'" aria-label="Action type: '+ACTN[a]+'">'+ACT[a]+'</span>'}).join('')+tags((x.f||[]).filter(function(f){return f!='none'}).map(function(f){return FQ[f]}),'a','Frequency')+tags((x.ab||[]).map(function(a){return ABL[a]}),'a','Activated abilities')+tags((x.du||[]).map(function(a){return DUR[a]}),'a','Duration')+tags(x.t.slice(0,4),'','Trait');if(showSc)addSc(d,x);var b=d.querySelector('.ex'),f=d.querySelector('.full'),pv=d.querySelector('.pv');function so(o){f.hidden=!o;pv.hidden=o;b.setAttribute('aria-expanded',o);b.textContent=o?'\u25be':'\u25b8';if(o&&!f.innerHTML)f.innerHTML=idesc(x.x||x.d)}b.onclick=function(){so(f.hidden)};d.so=so;FB(d,x);HB(d,x);return d}
 var AS={'1 action':'1','2 actions':'2','3 actions':'3','reaction':'R','free action':'F'};
-function fx(s){return esc(s).replace(/(\u00a7Activate\u00a7|Activate\s*[\u2014\u2013-][^\n(\u00a7]*?) ([AaDd])(?= ?\(| (?:envision|command|Interact|manipulate|concentrate)\b)/g,function(m,p,g){return p+' ('+(g.toLowerCase()=='d'?'2 actions':'1 action')+')'}).replace(/\bActivate(?=\u2014|\u2013)/g,'<strong>Activate</strong>').replace(/\u0001([^\u0002]*)\u0002([^\u0003]*)\u0003/g,function(m,k,l){return '<span class="ref" tabindex="0" data-k="'+k.replace(/"/g,'&quot;')+'">'+l+'</span>'}).replace(/\u00a7([^\u00a7]+)\u00a7/g,'<strong>$1</strong>').replace(/\((1 action|2 actions|3 actions|reaction|free action)\)/g,function(m,w){var k=AS[w];return '<span class=\"act\" title=\"'+ACTN[k]+'\" aria-label=\"'+ACTN[k]+'\">'+ACT[k]+'</span>'})}
+var DEGK={'Critical Success':'cs','Success':'s','Failure':'f','Critical Failure':'cf'},HDR=/^(?:\u00a7Activate\u00a7|Activate\s*[\u2014\u2013-])/,
+ROWP=/^(Requirements|Trigger|Frequency|Saving Throw|Onset|Maximum Duration|Duration|Stage \d+|Ammunition|Usage|Cantrip|\d+(?:st|nd|rd|th))\s+(?=\S)/,DEGP=/^(Critical Success|Critical Failure|Success|Failure)\s+(?=\S)/;
+function ibl(ln){var m=ln.match(/^\u00a7([^\u00a7]+)\u00a7\s?([\s\S]*)$/);if(m)return{k:m[1],v:m[2]};m=ln.match(DEGP)||ln.match(ROWP);return m?{k:m[1],v:ln.slice(m[0].length)}:null}
+function idesc(t){var L=String(t||'').split('\n'),h='',i=0,n=L.length,g=null,b;
+function cl(){if(g!==null){h+='<div class="irows">'+g+'</div>';g=null}}
+while(i<n){var ln=L[i];
+if(!ln.trim()){i++;continue}
+if(HDR.test(ln)){cl();var s=fx(ln),tr='',m=s.match(/\s*\(([a-z\-]+(?:,\s*[a-z\-]+)*)\)\s*$/);
+if(m){s=s.slice(0,m.index);tr=m[1].split(/,\s*/).map(function(z){return '<span class="tg">'+z+'</span>'}).join('')}
+g='<div class="ih">'+s+(tr?' <span class="itg">'+tr+'</span>':'')+'</div>';i++;continue}
+b=ibl(ln);
+if(b&&DEGK[b.k]!=null){cl();var o='';while(i<n&&(b=ibl(L[i]))&&DEGK[b.k]!=null){o+='<div class="r"><span><i class="dot d'+DEGK[b.k]+'" aria-hidden="true"></i>'+esc(b.k)+'</span><span>'+fx(b.v)+'</span></div>';i++}h+='<div class="sbx">'+o+'</div>';continue}
+if(b&&b.k=='Craft Requirements'){cl();h+='<div class="irows"><div class="ir cr"><b>'+esc(b.k)+'</b><span>'+fx(b.v)+'</span></div></div>';i++;continue}
+if(b){if(g===null)g='';g+='<div class="ir"><b>'+esc(b.k)+'</b><span>'+fx(b.v)+'</span></div>';i++;continue}
+if(ln.charAt(0)=='\u0001'&&/^\u0001e:/.test(ln)){cl();h+='<p class="mu">'+fx(ln)+'</p>';i++;continue}
+if(/^[\u2022\u25e6]/.test(ln)){cl();var it=[],cur=null;while(i<n&&/^[\u2022\u25e6]/.test(L[i])){var tx=L[i].replace(/^[\u2022\u25e6]\s*/,'');if(L[i].charAt(0)=='\u2022'||!cur){cur={t:tx,c:[]};it.push(cur)}else cur.c.push(tx);i++}
+h+='<ul class="bul">'+it.map(function(z){return '<li>'+fx(z.t)+(z.c.length?'<ul>'+z.c.map(function(c){return '<li>'+fx(c)+'</li>'}).join('')+'</ul>':'')+'</li>'}).join('')+'</ul>';continue}
+cl();h+='<p>'+fx(ln)+'</p>';i++}
+cl();return h}
+var MECH=/[+\u2013\u2212]\s?\d|\b(?:bonus|penalty|resistance|immun\w*|Hit Points|gain|regain|Speed|DC|damage|cast|Strike)\b/i;
+function plain(s){return cx(s).replace(/\u0001[^\u0002]*\u0002([^\u0003]*)\u0003/g,'$1').replace(/\u00a7/g,'')}
+function glance(x){var L=String(x.x||'').split('\n'),ps=[],ac=[],cur=null,i,ln,p,m;
+for(i=0;i<L.length;i++){ln=L[i];p=plain(ln).trim();if(!p)continue;
+if(HDR.test(ln)){var gm=fx(ln).match(/<span class="act"[^>]*>[^<]*<\/span>/),v=p.replace(/^Activate\s*[\u2014\u2013-]?\s*/,'').replace(/^(?:\([^)]*action[^)]*\)|reaction|[ADRF])(?=\s|$)\s*/,'').replace(/\s*\([^)]*action[^)]*\)/g,'').replace(/\s*\([a-z\-]+(?:,\s*[a-z\-]+)*\)\s*$/,'').trim();
+cur={nm:/^[A-Z]/.test(v)&&v.length<48?v:'',gl:gm?gm[0]:'',fq:'',dc:''};ac.push(cur);continue}
+var b=ibl(ln);
+if(b){if(b.k=='Craft Requirements')break;if(cur){if(b.k=='Frequency')cur.fq=plain(b.v).trim();m=plain(b.v).match(/\bDC (\d+) (Fortitude|Reflex|Will|Perception|[A-Z][a-z]+)/);if(m&&!cur.dc)cur.dc='DC '+m[1]+' '+m[2]}continue}
+if(ln.charAt(0)=='\u0001'&&/^\u0001e:/.test(ln))continue;if(/^[\u2022\u25e6]/.test(ln))continue;
+(p.match(/[^.!?]+(?:[.!?]+(?=\s|$)|$)|[.!?]+/g)||[p]).map(function(z){return z.trim()}).filter(Boolean).forEach(function(z){if(ps.length<2&&MECH.test(z))ps.push(z)})}
+var tx=ps.join(' ');if(tx.length>170)tx=tx.slice(0,167).replace(/\s+\S*$/,'')+'\u2026';
+var seen={},as=ac.filter(function(a){if(!a.nm&&!a.fq&&!a.dc)return false;var k=(a.nm||'')+'|'+a.fq+'|'+a.dc;if(seen[k])return false;seen[k]=1;return true});ac=as;as=ac.slice(0,3).map(function(a){var s=(a.gl||'<span class="act">\u25c6</span>')+' '+esc(a.nm||'Activate');if(a.fq)s+=' \u00b7 '+esc(a.fq);if(a.dc)s+=' \u00b7 '+esc(a.dc);return '<span class="gla">'+s+'</span>'}).join('')+(ac.length>3?' <span class="meta">+'+(ac.length-3)+' more</span>':'');
+if(!tx&&!as){tx=x.d+(x.d.length>=170?'\u2026':'')}
+return '<p class="pv">'+esc(tx)+as+'</p>'}
+function cx(s){return String(s).replace(/\btype:(emanation|cone|burst|line)\b/g,'$1').replace(/\[([a-z\-]+)\|[^\]]*\]/g,' $1')}
+function fx(s){return esc(cx(s)).replace(/(\u00a7Activate\u00a7|Activate\s*[\u2014\u2013-][^\n(\u00a7]*?) ([AaDd])(?= ?\(| (?:envision|command|Interact|manipulate|concentrate)\b)/g,function(m,p,g){return p+' ('+(g.toLowerCase()=='d'?'2 actions':'1 action')+')'}).replace(/\bActivate(?=\u2014|\u2013)/g,'<strong>Activate</strong>').replace(/\u0001([^\u0002]*)\u0002([^\u0003]*)\u0003/g,function(m,k,l){return '<span class="ref" tabindex="0" data-k="'+k.replace(/"/g,'&quot;')+'">'+l+'</span>'}).replace(/\u00a7([^\u00a7]+)\u00a7/g,'<strong>$1</strong>').replace(/\((1 action|2 actions|3 actions|reaction|free action)\)/g,function(m,w){var k=AS[w];return '<span class=\"act\" title=\"'+ACTN[k]+'\" aria-label=\"'+ACTN[k]+'\">'+ACT[k]+'</span>'})}
 var HKEY='pf2e-hidden',hid={};
 try{JSON.parse(localStorage.getItem(HKEY)||'[]').forEach(function(k){hid[k]=1})}catch(e){}
 function hk(x){return x.n+'~'+x.l}
