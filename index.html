@@ -100,7 +100,7 @@ details.fg{border-top:1px solid var(--line);margin-top:12px;padding-top:6px}deta
 .gd summary{cursor:pointer;font-weight:700}.gd ul{margin:8px 0 4px;padding-left:20px}.gd li{margin:3px 0}
 footer{max-width:1100px;margin:auto;padding:0 20px 30px;color:var(--mute);font-size:.88rem}footer p{margin:0 0 8px}footer a,.fb a{color:var(--acc)}.fb{margin-top:6px!important;font-size:.92rem}.beta{display:inline-block;vertical-align:middle;font:600 .7rem/1 "Segoe UI",system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:4px 7px;border-radius:4px;border:1px solid var(--brass);color:var(--brass)}
 </style></head><body>
-<header><h1>PF2e Equipment Helper <span class="beta">Beta</span></h1><p>Search and rank every item in the Pathfinder 2e equipment data by class, level, budget, activation, skills and passive effects.</p><p class="fb">This is a prototype. Found a bug or have an idea? <a href="https://github.com/Madilloman/PF2e-Equipment-Helper/issues/new/choose" target="_blank" rel="noopener">Send feedback</a>.</p></header>
+<header><h1>PF2e Equipment Helper <span class="beta">Beta</span></h1><p>Search and rank every item in the Pathfinder 2e equipment data by class, level, price, activation, skills and passive effects.</p><p class="fb">This is a prototype. Found a bug or have an idea? <a href="https://github.com/Madilloman/PF2e-Equipment-Helper/issues/new/choose" target="_blank" rel="noopener">Send feedback</a>.</p></header>
 <main>
 <button class="chip" id="ftog" aria-expanded="false" aria-controls="fpanel">Filters</button>
 <button class="fcb" id="fopen" aria-label="Show filters" title="Show filters">&#9654;</button>
@@ -113,8 +113,8 @@ footer{max-width:1100px;margin:auto;padding:0 20px 30px;color:var(--mute);font-s
 <div class="row" style="margin-top:6px"><button class="chip" id="shm" style="flex:none">Make code</button><button class="chip" id="sha" style="flex:none">Apply code</button></div><p class="hint" id="shmsg" style="margin-top:6px"></p></details>
 <div class="row" style="margin:0 0 8px"><button class="chip" id="pop" aria-pressed="false">Popular for this class</button></div>
 <label for="cls">Class</label><select id="cls"></select>
-<div class="row"><div><label for="lvl">Character level</label><input id="lvl" type="number" min="1" max="20" value="5"></div><div><label for="gp">Budget (gp)</label><input id="gp" type="number" min="0" placeholder="none"></div></div>
-<div class="row"><div><label for="lo">Item level from</label><input id="lo" type="number" min="0" max="25" value="0"></div><div><label for="hi">to</label><input id="hi" type="number" min="0" max="25" placeholder="char lvl"></div></div>
+<div class="row"><div><label for="pmin">Price (Min)</label><input id="pmin" type="number" min="0" step="any" placeholder="none"></div><div><label for="pmax">Price (Max)</label><input id="pmax" type="number" min="0" step="any" placeholder="none"></div></div>
+<div class="row"><div><label for="lo">Item level from</label><input id="lo" type="number" min="0" max="25" value="0"></div><div><label for="hi">to</label><input id="hi" type="number" min="0" max="25" placeholder="none"></div></div>
 <label for="q">Search name</label><input id="q" type="search">
 <label for="qd">Search description</label><input id="qd" type="search">
 <div class="lb" id="l1">General Categories</div><div class="chips" id="roles" role="group" aria-labelledby="l1"></div>
@@ -231,11 +231,11 @@ function chips(id,keys,lab,k){keys.forEach(function(v){var b=document.createElem
 b.onclick=function(e){tog(k,v,exm(e));cp(k,id);go()};b.oncontextmenu=function(e){e.preventDefault();tog(k,v,true);cp(k,id);go()};$(id).appendChild(b)})}
 function cp(k,id){var s=st[k];[].forEach.call($(id).children,function(b){var v=b.dataset.v,e=s.exc.indexOf(v)>=0;b.className='chip'+(e?' off':'');b.setAttribute('aria-pressed',s.inc.indexOf(v)>=0);b.setAttribute('aria-label',(e?'Excluded: ':'')+b.title)})}
 chips('roles',ROLES,{},'roles');chips('acts',Object.keys(ACT),ACT,'acts');chips('freq',Object.keys(FQ),FQ,'freq');chips('buff',Object.keys(BUF),BUF,'buff');chips('bonus',Object.keys(BON),BON,'bonus');chips('dur',Object.keys(DUR),DUR,'dur');chips('abil',Object.keys(ABL),ABL,'abil');fill('rar',['common','uncommon','rare','unique'],{common:'Common',uncommon:'Uncommon',rare:'Rare',unique:'Unique'});DDS.rar.H=function(v){return ricon(v)+esc(DDS.rar.L(v))};paint('rar');fill('src',SBL.slice().sort());fill('cnt',['remaster','legacy'],{remaster:'Remaster',legacy:'Legacy'});
-$('clr').onclick=function(){['q','qd'].forEach(function(i){$(i).value=''});KEYS.forEach(function(k){st[k]={inc:[],exc:[]};paint(k)});['roles','acts','freq','buff','bonus','abil','dur'].forEach(function(k){cp(k,k)});go()};
+$('clr').onclick=function(){['q','qd','pmin','pmax'].forEach(function(i){$(i).value=''});KEYS.forEach(function(k){st[k]={inc:[],exc:[]};paint(k)});['roles','acts','freq','buff','bonus','abil','dur'].forEach(function(k){cp(k,k)});go()};
 $('sort').onchange=function(){go()};
 $('sdir').onclick=function(){sdesc=!sdesc;this.textContent=sdesc?'High to low':'Low to high';this.setAttribute('aria-label','Sort direction: '+(sdesc?'high to low':'low to high'));go()};
 $('scb').onclick=function(){showSc=!showSc;this.setAttribute('aria-pressed',showSc);this.textContent=showSc?'Hide item scores':'Show item scores';run()};
-['cls','lvl','gp','lo','hi','q','qd'].forEach(function(i){$(i).oninput=function(){page=1;run()}});
+['cls','pmin','pmax','lo','hi','q','qd'].forEach(function(i){$(i).oninput=function(){page=1;run()}});
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
 function fm(p){return p>=1?(+p.toFixed(1))+' gp':p>0?(+(p*10).toFixed(1))+' sp':'free'}
 function link(x){var u=x.u?'https://2e.aonprd.com/'+x.u:'https://2e.aonprd.com/Search.aspx?q='+encodeURIComponent(x.n);return '<a target="_blank" rel="noopener" href="'+u+'" title="'+(x.u?'Open on Archives of Nethys':'Search Archives of Nethys')+'">'+esc(x.n)+'</a>'}
@@ -246,7 +246,7 @@ function usl(x){return ''}
 function trs(x){var h='';if(x.ry&&x.ry!='common')h+='<span class="tr tr-'+x.ry+'"'+tda(x.ry)+'>'+tcase(x.ry)+'</span>';(x.tt||[]).forEach(function(z){h+='<span class="tr"'+tda(z)+'>'+esc(tcase(z))+'</span>'});return h?'<div class="trs" aria-label="Traits">'+h+'</div>':''}
 function lgb(x){return x.lg?' <span class="lgb" title="Pre-remaster (legacy) content">Legacy</span>':''}
 function ricon(ry){ry=ry||'common';var s={common:['\u25cf','Common'],uncommon:['\u25a0','Uncommon'],rare:['\u25c6','Rare'],unique:['\u2605','Unique']}[ry]||['\u25cf',ry];return '<span class="ri ry-'+ry+'" role="img" aria-label="'+s[1]+'" title="'+s[1]+'">'+s[0]+'</span>'}
-function cfg(){var an=$('cls').value=='Any',c=an?['','']:CL[$('cls').value],lvl=+$('lvl').value||1;return{any:an,cn:$('cls').value,tg:c[0].split(' '),pr:c[1].split(' '),lvl:lvl,hi:$('hi').value===''?lvl:+$('hi').value,lo:+$('lo').value||0,gp:$('gp').value===''?1e12:+$('gp').value}}
+function cfg(){var an=$('cls').value=='Any',c=an?['','']:CL[$('cls').value];return{any:an,cn:$('cls').value,tg:c[0].split(' '),pr:c[1].split(' '),hi:$('hi').value===''?99:+$('hi').value,lo:+$('lo').value||0,pmin:$('pmin').value===''?0:+$('pmin').value,pmax:$('pmax').value===''?1e12:+$('pmax').value}}
 function scoreParts(x,c,want){var P=prefs(c.cn),a=[['Item level ('+x.l+')',x.l*0.25]];if(x.r)a.push(['Rare or unique item',-1]);
 if(want.length)x.R.forEach(function(r){if(want.indexOf(r)>=0)a.push(['General category: '+r,3])});
 P.l.forEach(function(p){var m=pm(p,x,c.cn);if(m)a.push([(PT[p.t]||p.t)+': '+pdesc(p.t,p.v),p.w*m])});
@@ -255,7 +255,7 @@ function score(x,c,want){return scoreParts(x,c,want).reduce(function(s,z){return
 function get(k,x){switch(k){case 'roles':return x.R;case 'acts':return x.a||[];case 'freq':return x.f||[];case 'buff':return x.b||[];case 'kind':return x.k2?[x.k].concat(x.k2):[x.k];case 'slot':return x.s?[x.s]:[];case 'skill':return x.sk||[];case 'grp':return x.g?[x.g]:[];case 'wcat':return x.c?[x.c]:[];case 'dtype':return x.dt?[x.dt]:[];case 'acat':return x.ac?[x.ac]:[];case 'agrp':return x.ag?[x.ag]:[];case 'wrange':return x.rg?[String(x.rg)]:[];case 'wreload':return x.rl!=null?[x.rl]:[];case 'wtype':return x.wt?[x.wt]:[];case 'hands':return x.hn?[x.hn]:[];case 'usage':return x.us&&!/^worn\b/.test(x.us)?[x.us]:[];case 'wdie':return x.k=='weapon'&&x.dd?[String(x.dd).replace(/^\d+/,'')]:[];case 'bw':return x.k=='weapon'&&x.bt?[x.bt]:[];case 'ba':return x.k=='armor'&&x.bt?[x.bt]:[];case 'tr':return x.tt||x.t;case 'rar':return[x.ry||'common'];case 'abil':return x.ab||[];case 'bonus':return x.bn||[];case 'dur':return x.du||[];case 'src':return x.sb!=null?[SBL[x.sb]]:[];case 'cnt':return[x.lg?'legacy':'remaster'];case 'save':return x.sv||[];case 'bulk':return x.bk?[x.bk]:[];case 'inv':return[(x.tt||x.t).indexOf('invested')>=0?'yes':'no'];case 'rtype':return x.rt||[];case 'itype':return x.im||[];case 'rval':return x.rv?RVT.filter(function(v){return x.rv>=+v}):[]}return[]}
 function pass(x,exOnly){for(var i=0;i<KEYS.length;i++){var k=KEYS[i],s=st[k];if(!s.inc.length&&!s.exc.length)continue;var v=get(k,x);if(!exOnly&&s.inc.length&&!s.inc.some(function(a){return v.indexOf(a)>=0}))return false;if(s.exc.some(function(a){return v.indexOf(a)>=0}))return false}return true}
 function filt(){var c=cfg(),want=st.roles.inc,q=$('q').value.toLowerCase().trim(),ql=$('qd').value.toLowerCase().trim(),o=[];
-D.forEach(function(x){if(x.l<c.lo||x.l>c.hi||x.p>c.gp||hid[hk(x)])return;if(popOn&&!isPop(x,c.cn))return;if(q&&x.n.toLowerCase().indexOf(q)<0)return;if(ql&&(x._l||(x._l=(x.x||x.d).toLowerCase())).indexOf(ql)<0)return;if(!pass(x))return;o.push({x:x,s:c.any?0:score(x,c,want)})});
+D.forEach(function(x){if(x.l<c.lo||x.l>c.hi||x.p<c.pmin||x.p>c.pmax||hid[hk(x)])return;if(popOn&&!isPop(x,c.cn))return;if(q&&x.n.toLowerCase().indexOf(q)<0)return;if(ql&&(x._l||(x._l=(x.x||x.d).toLowerCase())).indexOf(ql)<0)return;if(!pass(x))return;o.push({x:x,s:c.any?0:score(x,c,want)})});
 var sk=$('sort').value,dir=sdesc?-1:1,nm=function(a,b){return a.x.n.localeCompare(b.x.n)};
 if(sk=='score'&&c.any)sk='level';
 o.sort(sk=='score'?function(a,b){return dir*(a.s-b.s)||b.x.l-a.x.l||nm(a,b)}:sk=='level'?function(a,b){return dir*(a.x.l-b.x.l)||b.s-a.s||nm(a,b)}:function(a,b){return dir*(a.x.p-b.x.p)||a.x.l-b.x.l||nm(a,b)});
@@ -430,8 +430,8 @@ Object.keys(o.p).forEach(function(cn){var q=o.p[cn];if(!CL[cn]||!q||!Array.isArr
 if(!n.length){$('pxm').textContent='That code has no usable class preferences.';return}savP();loadP();run();$('pxm').textContent='Imported and saved preferences for '+n.join(', ')+(bad?' ('+bad+' skipped as invalid)':'')+'. Existing saved versions of those classes were replaced.'};
 $('preset').onclick=function(){var cn=$('pcls').value;delete PS[cn];savP();loadP();run()};
 var cur=[];
-function run(){cur=filt();updFt();updGd();var c=cfg();$('count').textContent=cur.length+' item'+(cur.length==1?'':'s')+(c.any?' for any class':' for a level '+c.lvl+' '+$('cls').value)+', levels '+c.lo+' to '+c.hi+'. Sorted by '+sortText();
-$('list').innerHTML=cur.length?'':'<div class="item"><p>Nothing matches. Widen the level range, raise the budget, or clear a filter.</p></div>';
+function run(){cur=filt();updFt();updGd();var c=cfg();$('count').textContent=cur.length+' item'+(cur.length==1?'':'s')+(c.any?' for any class':' for '+$('cls').value)+', levels '+c.lo+' to '+(c.hi==99?'any':c.hi)+'. Sorted by '+sortText();
+$('list').innerHTML=cur.length?'':'<div class="item"><p>Nothing matches. Widen the level or price range, or clear a filter.</p></div>';
 var per=perPage(),pages=Math.max(1,Math.ceil(cur.length/per));if(page>pages)page=pages;cur.slice((page-1)*per,page*per).forEach(function(x){var c=card(x);$('list').appendChild(c);if(allOpen)c.so(true)});pager(pages,per);if(!$('v2').hidden)hl()}
 function perPage(){var v=parseInt($('pp').value,10);return isNaN(v)||v<1?50:Math.min(v,1000)}
 function pager(pages,per){var h='';if(pages>1){var cp=page,nums=[],last=0;for(var i=1;i<=pages;i++)if(i==1||i==pages||Math.abs(i-cp)<=2)nums.push(i);
@@ -452,13 +452,13 @@ if(x.k=='weapon'){if(RK[x.c]>t[0])s-=3;if(x.g&&t[2].split(' ').indexOf(x.g)>=0)s
 if(t[0]==2&&(x.b||[]).indexOf('damage')>=0)s+=2;
 var r=CR[c.cn]||(CR[c.cn]=new RegExp(t[1],'i'));if(r.test(x.n+' '+x.d))s+=1;return s}
 function updGrp(){[].forEach.call(document.querySelectorAll('details.fg'),function(g){var n=0;g.dataset.k.split(',').forEach(function(k){n+=st[k].inc.length+st[k].exc.length});g.querySelector('.fgn').textContent=n?' ('+n+' active)':'';if(n)g.open=true})}
-function updFt(){updGrp();var n=0;KEYS.forEach(function(k){n+=st[k].inc.length+st[k].exc.length});['q','qd','gp','lo'].forEach(function(i){var v=$(i).value;if(v&&v!='0')n++});if(popOn)n++;var o=$('fpanel').classList.contains('open');$('ftog').textContent=(n?'Filters ('+n+' active)':'Filters')+' \u2014 tap to '+(o?'hide':'show')+' \u25be'.replace('\u25be',o?'\u25b4':'\u25be')}
+function updFt(){updGrp();var n=0;KEYS.forEach(function(k){n+=st[k].inc.length+st[k].exc.length});['q','qd','pmin','pmax','lo','hi'].forEach(function(i){var v=$(i).value;if(v&&v!='0')n++});if(popOn)n++;var o=$('fpanel').classList.contains('open');$('ftog').textContent=(n?'Filters ('+n+' active)':'Filters')+' \u2014 tap to '+(o?'hide':'show')+' \u25be'.replace('\u25be',o?'\u25b4':'\u25be')}
 $('ftog').onclick=function(){var o=!$('fpanel').classList.contains('open');$('fpanel').classList.toggle('open',o);this.setAttribute('aria-expanded',o);updFt()};
 ['q','qd'].forEach(function(id){$(id).addEventListener('keydown',function(e){if(e.key!='Enter'||!window.matchMedia||!window.matchMedia('(max-width:800px)').matches)return;e.preventDefault();var el=this;run();el.blur();var p=$('fpanel');p.classList.remove('open');$('ftog').setAttribute('aria-expanded','false');updFt();setTimeout(function(){var r=$('list').querySelector('.item');if(r&&r.scrollIntoView)r.scrollIntoView({block:'start',behavior:'smooth'})},60)})});
 $('fcol').onclick=function(){document.querySelector('main').classList.add('fc');$('fopen').focus()};$('fopen').onclick=function(){document.querySelector('main').classList.remove('fc');$('fcol').focus()};
-function snap(){var s={v:1,c:$('cls').value,l:$('lvl').value,g:$('gp').value,lo:$('lo').value,hi:$('hi').value,q:$('q').value,qd:$('qd').value,pp:$('pp').value,pop:popOn?1:0,so:$('sort').value,sd:sdesc?1:0,f:{}};KEYS.forEach(function(k){var a=st[k];if(a.inc.length||a.exc.length)s.f[k]={i:a.inc.slice(),e:a.exc.slice()}});return s}
+function snap(){var s={v:1,c:$('cls').value,pmin:$('pmin').value,pmax:$('pmax').value,lo:$('lo').value,hi:$('hi').value,q:$('q').value,qd:$('qd').value,pp:$('pp').value,pop:popOn?1:0,so:$('sort').value,sd:sdesc?1:0,f:{}};KEYS.forEach(function(k){var a=st[k];if(a.inc.length||a.exc.length)s.f[k]={i:a.inc.slice(),e:a.exc.slice()}});return s}
 function applySnap(s){if(!s||typeof s!='object'||s.v!==1)return false;var S=function(v){return v==null?'':String(v)};
-if(CL[s.c]||s.c=='Any')$('cls').value=s.c;$('lvl').value=S(s.l)||'5';$('gp').value=S(s.g);$('lo').value=S(s.lo)||'0';$('hi').value=S(s.hi);$('q').value=S(s.q);$('qd').value=S(s.qd);$('pp').value=S(s.pp)||'50';
+if(CL[s.c]||s.c=='Any')$('cls').value=s.c;$('pmin').value=S(s.pmin);$('pmax').value=S(s.pmax!=null?s.pmax:s.g);$('lo').value=S(s.lo)||'0';$('hi').value=S(s.hi!==''&&s.hi!=null?s.hi:(s.pmin==null&&s.l?s.l:''));$('q').value=S(s.q);$('qd').value=S(s.qd);$('pp').value=S(s.pp)||'50';
 KEYS.forEach(function(k){var f=(s.f||{})[k]||{},ok=function(a){return Array.isArray(a)?a.map(String):[]};st[k]={inc:ok(f.i),exc:ok(f.e)};if(DDS[k])paint(k);else if($(k))cp(k,k)});
 if(s.so&&$('sort').querySelector('option[value="'+s.so+'"]'))$('sort').value=s.so;if(s.sd!=null){sdesc=!!s.sd;$('sdir').textContent=sdesc?'High to low':'Low to high'}popOn=!!s.pop;$('pop').setAttribute('aria-pressed',popOn);page=1;run();return true}
 function enc(s){return btoa(unescape(encodeURIComponent(JSON.stringify(s))))}

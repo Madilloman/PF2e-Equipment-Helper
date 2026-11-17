@@ -1,6 +1,6 @@
 # PF2e Equipment Helper
 
-Search and rank Pathfinder Second Edition equipment by class, level, budget, activation, skills and passive effects.
+Search and rank Pathfinder Second Edition equipment by class, level, price, activation, skills and passive effects.
 
 **Try it:** https://madilloman.github.io/PF2e-Equipment-Helper/
 
@@ -17,7 +17,7 @@ A free GitHub account is needed to open an issue.
 ## Key features
 
 ### Browse
-Pick a **class**, **character level** and **budget (gp)**, and the app lists items you can afford at your level. You can also set an item level range, search item names and descriptions, and sort results by item score, level or price (ascending or descending).
+Pick a **class**, then narrow the list with an item **level range** and a **price range** (Price Min and Price Max, in gp). You can also search item names and descriptions, and sort results by item score, level or price (ascending or descending).
 
 - **Popular for this class:** Each class has a curated list of well-regarded gear, based on a class gear guide with star ratings. Choosing "Popular for this class" shows those items, and ranks them higher when you sort by item score.
 - **What to look for:** A short guide box for the selected class that explains which kinds of gear matter most, and lists the items the guide recommends.
