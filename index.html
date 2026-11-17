@@ -272,6 +272,7 @@ var AS={'1 action':'1','2 actions':'2','3 actions':'3','reaction':'R','free acti
 var DEGK={'Critical Success':'cs','Success':'s','Failure':'f','Critical Failure':'cf'},HDR=/^(?:\u00a7Activate\u00a7|Activate\s*[\u2014\u2013-])/,
 ROWP=/^(Requirements|Trigger|Frequency|Saving Throw|Onset|Maximum Duration|Duration|Stage \d+|Ammunition|Usage|Cantrip|\d+(?:st|nd|rd|th))\s+(?=\S)/,DEGP=/^(Critical Success|Critical Failure|Success|Failure)\s+(?=\S)/;
 function ibl(ln){var m=ln.match(/^\u00a7([^\u00a7]+)\u00a7\s?([\s\S]*)$/);if(m)return{k:m[1],v:m[2]};m=ln.match(DEGP)||ln.match(ROWP);return m?{k:m[1],v:ln.slice(m[0].length)}:null}
+function isFxRef(ln){return /^Effect: [^.\n]{1,90}$/.test(ln.replace(/\u0001[^\u0002]*\u0002([^\u0003]*)\u0003/g,'$1').trim())}
 function idesc(t,us){var L=String(t||'').split('\n'),h='',i=0,n=L.length,g=null,b,ac=false;
 function cl(){if(g!==null){h+='<div class="irows'+(ac?' abox':'')+'">'+g+'</div>';g=null;ac=false}}
 while(i<n){var ln=L[i];
@@ -284,7 +285,7 @@ if(b&&DEGK[b.k]!=null){var o='';while(i<n&&(b=ibl(L[i]))&&DEGK[b.k]!=null){o+='<
 if(b&&us&&b.k=='Usage'){i++;continue}
 if(b&&b.k=='Craft Requirements'){cl();h+='<div class="irows"><div class="ir cr"><b>'+esc(b.k)+'</b><span>'+fx(b.v)+'</span></div></div>';i++;continue}
 if(b){if(g===null)g='';g+='<div class="ir"><b>'+esc(b.k)+'</b><span>'+fx(b.v)+'</span></div>';i++;continue}
-if(ln.charAt(0)=='\u0001'&&/^\u0001e:/.test(ln)){cl();h+='<p class="mu">'+fx(ln)+'</p>';i++;continue}
+if(isFxRef(ln)){i++;continue}
 if(/^[\u2022\u25e6]/.test(ln)){cl();var it=[],cur=null;while(i<n&&/^[\u2022\u25e6]/.test(L[i])){var tx=L[i].replace(/^[\u2022\u25e6]\s*/,'');if(L[i].charAt(0)=='\u2022'||!cur){cur={t:tx,c:[]};it.push(cur)}else cur.c.push(tx);i++}
 h+='<ul class="bul">'+it.map(function(z){return '<li>'+fx(z.t)+(z.c.length?'<ul>'+z.c.map(function(c){return '<li>'+fx(c)+'</li>'}).join('')+'</ul>':'')+'</li>'}).join('')+'</ul>';continue}
 cl();h+='<p>'+fx(ln)+'</p>';i++}
@@ -297,7 +298,7 @@ if(HDR.test(ln)){var gm=fx(ln).match(/<span class="act"[^>]*>[^<]*<\/span>/),v=p
 cur={nm:/^[A-Z]/.test(v)&&v.length<48?v:'',gl:gm?gm[0]:'',fq:'',dc:''};ac.push(cur);continue}
 var b=ibl(ln);
 if(b){if(b.k=='Craft Requirements')break;if(cur){if(b.k=='Frequency')cur.fq=plain(b.v).trim();m=plain(b.v).match(/\bDC (\d+) (Fortitude|Reflex|Will|Perception|[A-Z][a-z]+)/);if(m&&!cur.dc)cur.dc='DC '+m[1]+' '+m[2]}continue}
-if(ln.charAt(0)=='\u0001'&&/^\u0001e:/.test(ln))continue;if(/^[\u2022\u25e6]/.test(ln))continue;
+if(isFxRef(ln))continue;if(/^[\u2022\u25e6]/.test(ln))continue;
 (p.match(/[^.!?]+(?:[.!?]+(?=\s|$)|$)|[.!?]+/g)||[p]).map(function(z){return z.trim()}).filter(Boolean).forEach(function(z){if(ps.length<2&&MECH.test(z))ps.push(z)})}
 var tx=ps.join(' ');if(tx.length>240)tx=tx.slice(0,237).replace(/\s+\S*$/,'')+'\u2026';
 var seen={},as=ac.filter(function(a){if(!a.nm&&!a.fq&&!a.dc)return false;var k=(a.nm||'')+'|'+a.fq+'|'+a.dc;if(seen[k])return false;seen[k]=1;return true});ac=as;as=ac.slice(0,3).map(function(a){var s=(a.gl||'<span class="act">\u25c6</span>')+' '+esc(a.nm||'Activate');if(a.fq)s+=' \u00b7 '+esc(a.fq);if(a.dc)s+=' \u00b7 '+esc(a.dc);return '<span class="gla">'+s+'</span>'}).join('')+(ac.length>3?' <span class="meta">+'+(ac.length-3)+' more</span>':'');
