@@ -41,7 +41,7 @@ th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}
 .full{white-space:normal;margin:6px 0 4px;padding-top:6px;border-top:1px solid var(--line);overflow-wrap:anywhere}
 .full p{margin:0 0 8px}.full .mu{color:var(--mute)}.full ul.bul{margin:0 0 8px;padding-left:22px}.full ul.bul ul{margin:2px 0;padding-left:20px}
 .irows{margin:0 0 8px}.ih{padding:6px 0 4px}.itg{margin-left:4px}.itg .tg{display:inline-block;font-size:.78rem;border:1px solid var(--line);border-radius:4px;padding:0 6px;margin:0 3px 0 0;color:var(--mute);white-space:nowrap}
-.ir{display:grid;grid-template-columns:minmax(88px,max-content) minmax(0,1fr);gap:2px 14px;padding:5px 0;border-top:1px solid var(--line)}.ir b{font-weight:600;color:var(--mute)}.ir.cr{margin:0 0 8px}.abox{background:rgba(128,128,128,.08);background:color-mix(in srgb,var(--ink) 5%,transparent);border:1px solid var(--line);border-radius:8px;padding:2px 12px 4px;margin:0 0 10px}.abox .ih{padding:6px 0 6px}.abox .ir:last-child{padding-bottom:2px}.abox .sbx{margin:6px 0 4px;background:var(--panel)}
+.ir{display:grid;grid-template-columns:minmax(88px,max-content) minmax(0,1fr);gap:2px 14px;padding:5px 0;border-top:1px solid var(--line)}.ir b{font-weight:600;color:var(--mute)}.ir.cr{margin:0 0 8px}.opt{margin:4px 0 0}.abox{background:rgba(128,128,128,.08);background:color-mix(in srgb,var(--ink) 5%,transparent);border:1px solid var(--line);border-radius:8px;padding:2px 12px 4px;margin:0 0 10px}.abox .ih{padding:6px 0 6px}.abox .ir:last-child{padding-bottom:2px}.abox .sbx{margin:6px 0 4px;background:var(--panel)}
 .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:1px}.dcs{background:#1D9E75}.ds{background:#97C459}.df{background:#EF9F27}.dcf{background:#E24B4A}
 .full .sbx{border:1px solid var(--line);border-radius:6px;padding:2px 12px;margin:0 0 10px}.full .sbx .r{display:grid;grid-template-columns:minmax(120px,max-content) minmax(0,1fr);gap:2px 14px;padding:5px 0;border-top:1px solid var(--line)}.full .sbx .r:first-child{border-top:0}
 .pv .gla{display:inline-block;margin-left:6px;border:1px solid var(--line);border-radius:4px;padding:0 6px;font-size:.85rem;white-space:nowrap;color:var(--ink)}
@@ -273,18 +273,21 @@ var DEGK={'Critical Success':'cs','Success':'s','Failure':'f','Critical Failure'
 ROWP=/^(Requirements|Trigger|Frequency|Saving Throw|Onset|Maximum Duration|Duration|Stage \d+|Ammunition|Usage|Cantrip|\d+(?:st|nd|rd|th))\s+(?=\S)/,DEGP=/^(Critical Success|Critical Failure|Success|Failure)\s+(?=\S)/;
 function ibl(ln){var m=ln.match(/^\u00a7([^\u00a7]+)\u00a7\s?([\s\S]*)$/);if(m)return{k:m[1],v:m[2]};m=ln.match(DEGP)||ln.match(ROWP);return m?{k:m[1],v:ln.slice(m[0].length)}:null}
 function isFxRef(ln){return /^(?:Spell )?(?:Effect|Aura): [^.\n]{1,90}$/.test(ln.replace(/\u0001[^\u0002]*\u0002([^\u0003]*)\u0003/g,'$1').trim())}
-function idesc(t,us){var L=cx(t||'').split('\n'),h='',i=0,n=L.length,g=null,b,ac=false;
+var FOLP=/one of the following|following (?:effects|options|choices|modes|abilities|benefits|forms)|choose (?:one|from)/i,OPT1=/^([A-Z][^.!?\n]{0,28}[!?])\s+(\S[\s\S]*)$/,OPT2=/^([A-Z][a-z]+)\s+([A-Z][\s\S]*)$/;
+function idesc(t,us){var L=cx(t||'').split('\n'),h='',i=0,n=L.length,g=null,b,ac=false,fol=false;
 function cl(){if(g!==null){h+='<div class="irows'+(ac?' abox':'')+'">'+g+'</div>';g=null;ac=false}}
 while(i<n){var ln=L[i];
 if(!ln.trim()){i++;continue}
 if(HDR.test(ln)){cl();var s=fx(ln),tr='',m=s.match(/\s*\(([a-z\-]+(?:,\s*[a-z\-]+)*)\)\s*$/);
 if(m){s=s.slice(0,m.index);tr=m[1].split(/,\s*/).map(function(z){return '<span class="tg">'+z+'</span>'}).join('')}
 ac=true;g='<div class="ih">'+s+(tr?' <span class="itg">'+tr+'</span>':'')+'</div>';i++;continue}
-b=ibl(ln);
+if(fol&&g!==null&&!isFxRef(ln)&&!ibl(ln)&&!/^[\u2022\u25e6]/.test(ln)){var os='',mo,oc=0;while(i<n&&L[i].trim()&&!HDR.test(L[i])&&!isFxRef(L[i])&&!ibl(L[i])&&!/^[\u2022\u25e6]/.test(L[i])&&(mo=L[i].match(OPT1)||L[i].match(OPT2))){os+='<div class="opt"><strong>'+esc(mo[1])+'</strong> '+fx(mo[2])+'</div>';oc++;i++}
+if(oc){fol=false;g=g.replace(/<\/span><\/div>$/,os+'</span></div>');continue}}
+fol=false;b=ibl(ln);
 if(b&&DEGK[b.k]!=null){var o='';while(i<n&&(b=ibl(L[i]))&&DEGK[b.k]!=null){o+='<div class="r"><span><i class="dot d'+DEGK[b.k]+'" aria-hidden="true"></i>'+esc(b.k)+'</span><span>'+fx(b.v)+'</span></div>';i++}var bx='<div class="sbx">'+o+'</div>';if(g!==null&&ac)g+=bx;else{cl();h+=bx}continue}
 if(b&&us&&b.k=='Usage'){i++;continue}
 if(b&&b.k=='Craft Requirements'){cl();h+='<div class="irows"><div class="ir cr"><b>'+esc(b.k)+'</b><span>'+fx(b.v)+'</span></div></div>';i++;continue}
-if(b){if(g===null)g='';g+='<div class="ir"><b>'+esc(b.k)+'</b><span>'+fx(b.v)+'</span></div>';i++;continue}
+if(b){fol=FOLP.test(b.v);if(g===null)g='';g+='<div class="ir"><b>'+esc(b.k)+'</b><span>'+fx(b.v)+'</span></div>';i++;continue}
 if(isFxRef(ln)){i++;continue}
 if(/^[\u2022\u25e6]/.test(ln)){cl();var it=[],cur=null;while(i<n&&/^[\u2022\u25e6]/.test(L[i])){var tx=L[i].replace(/^[\u2022\u25e6]\s*/,'');if(L[i].charAt(0)=='\u2022'||!cur){cur={t:tx,c:[]};it.push(cur)}else cur.c.push(tx);i++}
 h+='<ul class="bul">'+it.map(function(z){return '<li>'+fx(z.t)+(z.c.length?'<ul>'+z.c.map(function(c){return '<li>'+fx(c)+'</li>'}).join('')+'</ul>':'')+'</li>'}).join('')+'</ul>';continue}
