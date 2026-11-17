@@ -84,6 +84,10 @@ th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}
 :root{--cr:#1e3a8a;--cq:#7e22ce}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--cr:#5b8def;--cq:#c084fc}}
 :root[data-theme="dark"]{--cr:#5b8def;--cq:#c084fc}
+:root{--dfire:#c2410c;--delec:#a16207;--dcold:#0369a1;--dacid:#4d7c0f;--dpois:#7e22ce;--dsoni:#0f766e;--dment:#be185d;--dforc:#4338ca;--dspir:#475569;--dvita:#b45309;--dvoid:#6b21a8;--dblee:#b91c1c;--dphys:#57534e}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--dfire:#fb923c;--delec:#facc15;--dcold:#7dd3fc;--dacid:#a3e635;--dpois:#c084fc;--dsoni:#5eead4;--dment:#f472b6;--dforc:#a5b4fc;--dspir:#cbd5e1;--dvita:#fcd34d;--dvoid:#a78bfa;--dblee:#f87171;--dphys:#d6d3d1}}
+:root[data-theme="dark"]{--dfire:#fb923c;--delec:#facc15;--dcold:#7dd3fc;--dacid:#a3e635;--dpois:#c084fc;--dsoni:#5eead4;--dment:#f472b6;--dforc:#a5b4fc;--dspir:#cbd5e1;--dvita:#fcd34d;--dvoid:#a78bfa;--dblee:#f87171;--dphys:#d6d3d1}
+.dmg{font-weight:700;white-space:nowrap}.dmi{width:.95em;height:.95em;vertical-align:-.12em;margin-left:2px}.d-fire{color:var(--dfire)}.d-elec{color:var(--delec)}.d-cold{color:var(--dcold)}.d-acid{color:var(--dacid)}.d-pois{color:var(--dpois)}.d-soni{color:var(--dsoni)}.d-ment{color:var(--dment)}.d-forc{color:var(--dforc)}.d-spir{color:var(--dspir)}.d-vita{color:var(--dvita)}.d-void{color:var(--dvoid)}.d-blee{color:var(--dblee)}.d-phys{color:var(--dphys)}
 [hidden]{display:none!important}
 .lgb{font-size:.72rem;font-style:italic;font-weight:400;font-family:inherit;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);border:1px solid var(--line);border-radius:4px;padding:0 5px;margin-left:4px;vertical-align:middle}
 #ftog{display:none}.fcb{display:none}#fpanel{position:relative}
@@ -307,9 +311,29 @@ if(isFxRef(ln))continue;if(/^[\u2022\u25e6]/.test(ln))continue;
 var tx=ps.join(' ');if(tx.length>240)tx=tx.slice(0,237).replace(/\s+\S*$/,'')+'\u2026';
 var seen={},as=ac.filter(function(a){var k=(a.nm||'')+'|'+a.fq+'|'+a.dc+'|'+(a.nm?'':a.cp);if(seen[k])return false;seen[k]=1;return true});ac=as;as=ac.slice(0,3).map(function(a){var s=a.nm?(a.gl||'<span class="act">\u25c6</span>')+' '+esc(a.nm):'Activate '+(a.gl||'<span class="act">\u25c6</span>')+(a.cp?' '+esc(a.cp):'');if(a.fq)s+=' \u00b7 '+esc(a.fq);if(a.dc)s+=' \u00b7 '+esc(a.dc);return '<span class="gla">'+s+'</span>'}).join('')+(ac.length>3?' <span class="meta">+'+(ac.length-3)+' more</span>':'');
 if(!tx){tx=plain((String(x.x||x.d).split('\n').filter(function(l){return l.trim()&&!HDR.test(l)&&!ibl(l)&&!isFxRef(l)})[0]||x.d)).trim();if(tx.length>240)tx=tx.slice(0,237).replace(/\s+\S*$/,'')+'\u2026'}
-return '<p class="pv">'+esc(tx)+as+'</p>'}
+return '<p class="pv">'+dmgc(esc(tx))+as+'</p>'}
+var DTY={fire:['fire','<path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-3.5 2-6 1 1.5 2 2.5 2 4 1-2 1-5 1-8z"/>'],
+electricity:['elec','<path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="currentColor" stroke="none"/>'],
+cold:['cold','<path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7M9 4l3 2 3-2M9 20l3-2 3 2"/>'],
+acid:['acid','<path d="M12 3s-6 7-6 11a6 6 0 0 0 12 0c0-4-6-11-6-11z"/><circle cx="10" cy="14" r="1.5"/>'],
+poison:['pois','<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3M7.5 15h9"/>'],
+sonic:['soni','<path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/>'],
+mental:['ment','<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'],
+force:['forc','<path d="M12 2l2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z"/>'],
+spirit:['spir','<path d="M6 20V10a6 6 0 0 1 12 0v10l-2-2-2 2-2-2-2 2-2-2z"/><circle cx="10" cy="10" r=".8" fill="currentColor"/><circle cx="14" cy="10" r=".8" fill="currentColor"/>'],
+vitality:['vita','<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>'],
+void:['void','<path d="M20 14A8 8 0 1 1 10 4a6 6 0 0 0 10 10z"/>'],
+bleed:['blee','<path d="M12 3s-6 7-6 11a6 6 0 0 0 12 0c0-4-6-11-6-11z" fill="currentColor"/>'],
+bludgeoning:['phys','<path d="M4 20l8-8M10 6l4-4 6 6-4 4z"/>'],
+piercing:['phys','<path d="M4 20 20 4M20 4h-6M20 4v6"/>'],
+slashing:['phys','<path d="M5 19 15 5M9 21 19 7"/>'],
+precision:['phys','<circle cx="12" cy="12" r="7"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/>']};
+DTY.positive=DTY.vitality;DTY.negative=DTY['void'];DTY.good=DTY.evil=DTY.lawful=DTY.chaotic=DTY.spirit;
+var DTN='(?:'+Object.keys(DTY).join('|')+')',DRX=new RegExp('\\b(\\d+d\\d+(?:\\s*[+\\-]\\s*\\d+)?|\\d+)(\\s+(?:(?:persistent|splash|additional|initial|extra)\\s+)*)('+DTN+')((?:,?\\s+(?:or\\s+|and\\s+)?'+DTN+')*\\s+damage)\\b','gi');
+function dmgc(h){return h.replace(/(^|>)([^<]+)/g,function(m,a,t){return a+t.replace(DRX,function(z,n,mid,ty,rest){var d=DTY[ty.toLowerCase()];return '<span class="dmg d-'+d[0]+'" title="'+esc(ty.toLowerCase())+' damage">'+n+'<svg class="dmi" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+d[1]+'</svg></span>'+mid+ty+rest})})}
 function cx(s){return String(s).replace(/^Activation(?=[ \u2014\u2013(])/gm,'Activate').replace(/\u0001[^\u0002]*\u0002(?:Spell )?(?:Effect|Aura): [^\u0003]*\u0003/g,'').replace(/\s*\(\s*\)/g,'').replace(/([.!?])[ \t]+(?:Spell )?(?:Effect|Aura): [^.\n]{1,90}$/gm,'$1').replace(/\btype:(emanation|cone|burst|line)\b/g,'$1').replace(/\[([a-z\-]+)\|[^\]]*\]/g,' $1')}
-function fx(s){return esc(cx(s)).replace(/(\u00a7Activate\u00a7|Activate\s*[\u2014\u2013-][^\n(\u00a7]*?) ([AaDd])(?= ?\(| (?:envision|command|Interact|manipulate|concentrate)\b)/g,function(m,p,g){return p+' ('+(g.toLowerCase()=='d'?'2 actions':'1 action')+')'}).replace(/\bActivate(?=\u2014|\u2013)/g,'<strong>Activate</strong>').replace(/^Activate(?= \()/,'<strong>Activate</strong>').replace(/\u0001([^\u0002]*)\u0002([^\u0003]*)\u0003/g,function(m,k,l){return '<span class="ref" tabindex="0" data-k="'+k.replace(/"/g,'&quot;')+'">'+l+'</span>'}).replace(/\u00a7([^\u00a7]+)\u00a7/g,'<strong>$1</strong>').replace(/\((1 action|2 actions|3 actions|reaction|free action)\)/g,function(m,w){var k=AS[w];return '<span class=\"act\" title=\"'+ACTN[k]+'\" aria-label=\"'+ACTN[k]+'\">'+ACT[k]+'</span>'})}
+function fx(s){return dmgc(fx0(s))}
+function fx0(s){return esc(cx(s)).replace(/(\u00a7Activate\u00a7|Activate\s*[\u2014\u2013-][^\n(\u00a7]*?) ([AaDd])(?= ?\(| (?:envision|command|Interact|manipulate|concentrate)\b)/g,function(m,p,g){return p+' ('+(g.toLowerCase()=='d'?'2 actions':'1 action')+')'}).replace(/\bActivate(?=\u2014|\u2013)/g,'<strong>Activate</strong>').replace(/^Activate(?= \()/,'<strong>Activate</strong>').replace(/\u0001([^\u0002]*)\u0002([^\u0003]*)\u0003/g,function(m,k,l){return '<span class="ref" tabindex="0" data-k="'+k.replace(/"/g,'&quot;')+'">'+l+'</span>'}).replace(/\u00a7([^\u00a7]+)\u00a7/g,'<strong>$1</strong>').replace(/\((1 action|2 actions|3 actions|reaction|free action)\)/g,function(m,w){var k=AS[w];return '<span class=\"act\" title=\"'+ACTN[k]+'\" aria-label=\"'+ACTN[k]+'\">'+ACT[k]+'</span>'})}
 var HKEY='pf2e-hidden',hid={};
 try{JSON.parse(localStorage.getItem(HKEY)||'[]').forEach(function(k){hid[k]=1})}catch(e){}
 function hk(x){return x.n+'~'+x.l}
