@@ -1,6 +1,6 @@
 # PF2e Equipment Helper
 
-Search and rank Pathfinder Second Edition equipment by class, level, price, activation, skills and passive effects.
+Choose your class and see the items that suit it best, ranked from the top. Want a quick list? Click 'Popular for this class' to show a curated shortlist as well as helpful guidelines for equipment selection. Use the many filters available to find exactly what you're looking for.
 
 **Try it:** https://madilloman.github.io/PF2e-Equipment-Helper/
 
